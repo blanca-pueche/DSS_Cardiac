@@ -7,10 +7,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="drools" />
+        <module name="DSS_Cardiac" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8">
-      <module name="drools" target="1.8" />
+      <module name="tutorial-drools-decisiontable" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
