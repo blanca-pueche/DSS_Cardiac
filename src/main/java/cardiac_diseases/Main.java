@@ -16,7 +16,7 @@ public class Main {
                 hospitalMenu();
                 while (program) {
                     printMenu();
-                    int choice = Integer.parseInt(sc.nextLine());
+                    Integer choice = Integer.parseInt(sc.nextLine());
                     while (choice < 1 || choice > 7) {
                         System.out.println("Not a valid number... try again");
                         printMenu();
