@@ -89,12 +89,12 @@ public class Main {
                         String name = sc.nextLine();
                         file = new FileManager(name);
                         hospital = file.uploadCSV(); //creates a hospital based on the file
-                        break;
+                        break; //TODO what if the file there is not a file with that name
                     }
                     case 2: {
                         System.out.println("Enter the name of the new file: ");
                         String name = sc.nextLine();
-                        System.out.print("Creating new file...");
+                        System.out.print("Creating new file...\n");
                         hospital = new Hospital(name);
                         file = new FileManager(name);
                         break;
@@ -154,6 +154,9 @@ public class Main {
         modifyAge(patient);
         modifySymptoms(patient);
     }
+
+
+
     public static void modifyName(Patient patient) throws IOException{
         //Scanner sc = new Scanner(System.in);
         System.out.println("Do you want to modify name?: [y/n]");
@@ -210,10 +213,10 @@ public class Main {
         LinkedList<Patient> list = hospital.getListOfPatients();
         System.out.println("List of patients in this hospital: ");
         for (int i = 0; i< list.size(); i++){
-            System.out.println(i + ": " + list.get(i).getName() + list.get(i).getSurname());
+            System.out.println(i + ": " + list.get(i).getName() + " " +list.get(i).getSurname());
         }
         System.out.println("Please, choose the patient to modify: ");
-        Integer choice = Integer.parseInt(sc.nextLine());
+        Integer choice = Integer.parseInt(sc.nextLine()); //TODO verify that the number corresponds to a patient
         Patient patient = list.get(choice);
         //sc.close();
         return patient;
