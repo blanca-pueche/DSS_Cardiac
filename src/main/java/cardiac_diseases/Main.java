@@ -161,17 +161,26 @@ public class Main {
         //Scanner sc = new Scanner(System.in);
         System.out.println("Do you want to modify name?: [y/n]");
         String modify = sc.nextLine();
+        while(!modify.equalsIgnoreCase("y") && !modify.equalsIgnoreCase("n")){
+            System.out.println("Answer not valid, please enter 'y' for yes or 'n' for no.");
+            modify = sc.nextLine();
+        }
         if (modify.equalsIgnoreCase("y")) {
             System.out.println("Enter new name: ");
             String newName = sc.nextLine();
             patient.setName(newName);
         }
+
         //sc.close();
     }
     public static void modifySurname(Patient patient) throws IOException{
         //Scanner sc = new Scanner(System.in);
         System.out.println("Do you want to modify surname?: [y/n]");
         String modify = sc.nextLine();
+        while(!modify.equalsIgnoreCase("y") && !modify.equalsIgnoreCase("n")){
+            System.out.println("Answer not valid, please enter 'y' for yes or 'n' for no.");
+            modify = sc.nextLine();
+        }
         if (modify.equalsIgnoreCase("y")) {
             System.out.println("Enter new surname: ");
             String newSurname = sc.nextLine();
@@ -183,6 +192,10 @@ public class Main {
         //Scanner sc = new Scanner(System.in);
         System.out.println("Do you want to modify age?: [y/n]");
         String modify = sc.nextLine();
+        while(!modify.equalsIgnoreCase("y") && !modify.equalsIgnoreCase("n")){
+            System.out.println("Answer not valid, please enter 'y' for yes or 'n' for no.");
+            modify = sc.nextLine();
+        }
         if (modify.equalsIgnoreCase("y")) {
             System.out.println("Enter new age: ");
             Integer newAge = Integer.parseInt(sc.nextLine());
@@ -192,10 +205,14 @@ public class Main {
     }
     public static void modifySymptoms(Patient patient) throws IOException{
         //Scanner sc = new Scanner(System.in);
-        System.out.println("Do you want to modify symptoms?: [y/n]");
         System.out.println("Current symptoms");
         System.out.println(patient.getSymptoms());
+        System.out.println("Do you want to modify symptoms?: [y/n]");
         String modify = sc.nextLine(); //TODO make functions to change only selected symptoms!?
+        while(!modify.equalsIgnoreCase("y") && !modify.equalsIgnoreCase("n")){
+            System.out.println("Answer not valid, please enter 'y' for yes or 'n' for no.");
+            modify = sc.nextLine();
+        }
         if (modify.equalsIgnoreCase("y")) {
             showAllSymptoms();
             LinkedList<Symptom> newSymptoms = selectSymptoms();
@@ -215,8 +232,13 @@ public class Main {
         for (int i = 0; i< list.size(); i++){
             System.out.println(i + ": " + list.get(i).getName() + " " +list.get(i).getSurname());
         }
-        System.out.println("Please, choose the patient to modify: ");
-        Integer choice = Integer.parseInt(sc.nextLine()); //TODO verify that the number corresponds to a patient
+        System.out.println("Please, choose the patient you want to work with: ");
+        Integer choice = Integer.parseInt(sc.nextLine());// verify that the number corresponds to a patient
+        while(choice>= list.size() || choice < 0){
+            System.out.println("No patient found with that ID.");
+            System.out.println("Please introduce a valid ID:");
+            choice = Integer.parseInt(sc.nextLine());
+        }
         Patient patient = list.get(choice);
         //sc.close();
         return patient;
