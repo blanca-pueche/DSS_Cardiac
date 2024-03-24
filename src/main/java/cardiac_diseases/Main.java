@@ -155,16 +155,19 @@ public class Main {
         modifySymptoms(patient);
     }
 
-
+    public static String checkYorN (String c){
+        while(!c.equalsIgnoreCase("y") && !c.equalsIgnoreCase("n")){
+            System.out.println("Answer not valid, please enter 'y' for yes or 'n' for no.");
+            c = sc.nextLine();
+        }
+        return c;
+    }
 
     public static void modifyName(Patient patient) throws IOException{
         //Scanner sc = new Scanner(System.in);
         System.out.println("Do you want to modify name?: [y/n]");
         String modify = sc.nextLine();
-        while(!modify.equalsIgnoreCase("y") && !modify.equalsIgnoreCase("n")){
-            System.out.println("Answer not valid, please enter 'y' for yes or 'n' for no.");
-            modify = sc.nextLine();
-        }
+        modify = checkYorN(modify);
         if (modify.equalsIgnoreCase("y")) {
             System.out.println("Enter new name: ");
             String newName = sc.nextLine();
@@ -177,10 +180,7 @@ public class Main {
         //Scanner sc = new Scanner(System.in);
         System.out.println("Do you want to modify surname?: [y/n]");
         String modify = sc.nextLine();
-        while(!modify.equalsIgnoreCase("y") && !modify.equalsIgnoreCase("n")){
-            System.out.println("Answer not valid, please enter 'y' for yes or 'n' for no.");
-            modify = sc.nextLine();
-        }
+        modify = checkYorN(modify);
         if (modify.equalsIgnoreCase("y")) {
             System.out.println("Enter new surname: ");
             String newSurname = sc.nextLine();
@@ -192,10 +192,7 @@ public class Main {
         //Scanner sc = new Scanner(System.in);
         System.out.println("Do you want to modify age?: [y/n]");
         String modify = sc.nextLine();
-        while(!modify.equalsIgnoreCase("y") && !modify.equalsIgnoreCase("n")){
-            System.out.println("Answer not valid, please enter 'y' for yes or 'n' for no.");
-            modify = sc.nextLine();
-        }
+        modify = checkYorN(modify);
         if (modify.equalsIgnoreCase("y")) {
             System.out.println("Enter new age: ");
             Integer newAge = Integer.parseInt(sc.nextLine());
@@ -208,37 +205,24 @@ public class Main {
         System.out.println("Current symptoms");
         System.out.println(patient.getSymptoms());
         System.out.println("Do you want to modify symptoms?: [y/n]");
-        String modify = sc.nextLine(); //TODO make functions to change only selected symptoms!?
-        while(!modify.equalsIgnoreCase("y") && !modify.equalsIgnoreCase("n")){
-            System.out.println("Answer not valid, please enter 'y' for yes or 'n' for no.");
-            modify = sc.nextLine();
-        }
+        String modify = sc.nextLine();
+        modify = checkYorN(modify);
         if (modify.equalsIgnoreCase("y")) {
             System.out.println("Do you want to delete symptoms?: [y/n]");
             String del = sc.nextLine();
-            while(!del.equalsIgnoreCase("y") && !del.equalsIgnoreCase("n")){
-                System.out.println("Answer not valid, please enter 'y' for yes or 'n' for no.");
-                del = sc.nextLine();
-            }
+            del = checkYorN(del);
             if (del.equalsIgnoreCase("y")){
                 removeSymptoms(patient.getSymptoms());
             }
-
             System.out.println("Do you want to add symptoms?: [y/n]");
             String add = sc.nextLine();
-            while(!add.equalsIgnoreCase("y") && !add.equalsIgnoreCase("n")){
-                System.out.println("Answer not valid, please enter 'y' for yes or 'n' for no.");
-                add = sc.nextLine();
-            }
+            add = checkYorN(add);
             if (add.equalsIgnoreCase("y")){
                 addSymptoms(patient.getSymptoms());
             }
             System.out.println("Do you want to make a new diagnosis with the new symptoms?: [y/n]");
             modify = sc.nextLine();
-            while(!modify.equalsIgnoreCase("y") && !modify.equalsIgnoreCase("n")){
-                System.out.println("Answer not valid, please enter 'y' for yes or 'n' for no.");
-                modify = sc.nextLine();
-            }
+            modify = checkYorN(modify);
             if (modify.equalsIgnoreCase("y")){
                 //TODO call the makeDiagnosis function
             }
