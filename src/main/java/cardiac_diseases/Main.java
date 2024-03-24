@@ -214,9 +214,25 @@ public class Main {
             modify = sc.nextLine();
         }
         if (modify.equalsIgnoreCase("y")) {
-            showAllSymptoms();
-            LinkedList<Symptom> newSymptoms = selectSymptoms();
-            patient.setSymptoms(newSymptoms);
+            System.out.println("Do you want to delete symptoms?: [y/n]");
+            String del = sc.nextLine();
+            while(!del.equalsIgnoreCase("y") && !del.equalsIgnoreCase("n")){
+                System.out.println("Answer not valid, please enter 'y' for yes or 'n' for no.");
+                del = sc.nextLine();
+            }
+            if (del.equalsIgnoreCase("y")){
+                removeSymptoms(patient.getSymptoms());
+            }
+
+            System.out.println("Do you want to add symptoms?: [y/n]");
+            String add = sc.nextLine();
+            while(!add.equalsIgnoreCase("y") && !add.equalsIgnoreCase("n")){
+                System.out.println("Answer not valid, please enter 'y' for yes or 'n' for no.");
+                add = sc.nextLine();
+            }
+            if (add.equalsIgnoreCase("y")){
+                addSymptoms(patient.getSymptoms());
+            }
             System.out.println("Do you want to make a new diagnosis with the new symptoms?: [y/n]");
             modify = sc.nextLine();
             while(!modify.equalsIgnoreCase("y") && !modify.equalsIgnoreCase("n")){
@@ -229,6 +245,43 @@ public class Main {
         }
         //sc.close();
     }
+
+    public static void removeSymptoms(LinkedList<Symptom> list){
+        int i = 0;
+        for (Symptom symp : list){
+        System.out.println(i + ". " + symp);
+        i++;
+        }
+        System.out.println("Enter the numbers of symptoms you want to remove (separated by spaces): ");
+        String input = sc.nextLine();
+        String[] numbers = input.split("\\s+");
+        for(String number:numbers){
+            int index = Integer.parseInt(number);
+            if(index>=0 && index<list.size()){
+                list.remove(index);
+            }
+        }
+        System.out.println("Updated symptoms: " + list);
+    }
+
+    public static void addSymptoms(LinkedList<Symptom> list){
+        showAllSymptoms();
+        System.out.print("Enter the numbers of selected symptoms (separated by spaces): ");
+        String input = sc.nextLine();
+        Symptom [] symptoms = Symptom.values();
+        // Split the input by spaces and convert them to integers
+        String[] numbers = input.split("\\s+");
+        int numberOfSymptoms = 156;
+        for (String number : numbers) {
+            int index = Integer.parseInt(number) - 1;
+            if (index >= 0 && index < symptoms.length && !list.contains(symptoms[index]) && index <= numberOfSymptoms ) {
+                list.add(symptoms[index]);
+            }
+        }
+        System.out.println(list);
+
+    }
+
     public static Patient choosePatient() throws IOException{
         //Scanner sc = new Scanner(System.in);
         LinkedList<Patient> list = hospital.getListOfPatients();
