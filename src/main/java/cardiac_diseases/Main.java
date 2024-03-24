@@ -219,6 +219,10 @@ public class Main {
             patient.setSymptoms(newSymptoms);
             System.out.println("Do you want to make a new diagnosis with the new symptoms?: [y/n]");
             modify = sc.nextLine();
+            while(!modify.equalsIgnoreCase("y") && !modify.equalsIgnoreCase("n")){
+                System.out.println("Answer not valid, please enter 'y' for yes or 'n' for no.");
+                modify = sc.nextLine();
+            }
             if (modify.equalsIgnoreCase("y")){
                 //TODO call the makeDiagnosis function
             }
