@@ -46,7 +46,7 @@ public class Main {
                             showPatientsInfo();
                             break;
                         }
-                        case 7: {
+                        case 7: { //TODO ir actualizando la lista de pacientes del hospital
                             boolean fileCreation = file.downloadCSV(hospital);
                             if (fileCreation) {
                                 System.out.print("Saved file correctly\n");
@@ -62,7 +62,7 @@ public class Main {
             } catch (IOException ex) {
                 System.out.println(ex);
             } catch (NumberFormatException ex) {
-                System.out.println("NOT A NUMBER... closing progra");
+                System.out.println("NOT A NUMBER... closing program");
                 System.out.println(ex);
             }
     }
@@ -90,7 +90,7 @@ public class Main {
                     hospitalMenu();
                     num = Integer.parseInt(sc.nextLine());
                 }
-                switch (num) { //TODO solve problem with file
+                switch (num) {
                     case 1: {
                         System.out.println("Enter the name of the file you want to open: ");
                         String name = sc.nextLine();
@@ -114,7 +114,6 @@ public class Main {
         }
     }
     private static void createPatient() throws IOException {
-       // Scanner sc = new Scanner(System.in);
         System.out.println("Introduce the name of the patient:");
         String name = sc.nextLine();
         System.out.println("Introduce the lastname of the patient:");
@@ -124,7 +123,6 @@ public class Main {
         LinkedList<Symptom> symptoms = selectSymptoms();
         Patient patient = new Patient(name, surname, age, symptoms);
         hospital.getListOfPatients().add(patient);
-        //sc.close();
     }
     public static void showAllSymptoms(){
         Symptom [] valores = Symptom.values();
@@ -209,18 +207,21 @@ public class Main {
             String del = sc.nextLine();
             del = checkYorN(del);
             if (del.equalsIgnoreCase("y")){
-                removeSymptoms(patient.getSymptoms());
+                LinkedList<Symptom> updated = removeSymptoms(patient);
+                patient.setSymptoms(updated);
             }
             System.out.println("Do you want to add symptoms?: [y/n]");
             String add = sc.nextLine();
             add = checkYorN(add);
             if (add.equalsIgnoreCase("y")){
-                addSymptoms(patient.getSymptoms());
+                LinkedList<Symptom> updated = addSymptoms(patient);
+                patient.setSymptoms(updated);
             }
             System.out.println("Do you want to make a new diagnosis with the new symptoms?: [y/n]");
             modify = sc.nextLine();
             modify = checkYorN(modify);
             if (modify.equalsIgnoreCase("y")){
+                patient.setDisease(null); //we do this so the previous disease doesn't appear in case the symptoms have changed
                 makeNewDiagnosis(patient);
             }
         }
@@ -232,21 +233,26 @@ public class Main {
             // Create Drools session
             kSession = new DroolsBeanFactory().getKieSession(resource);
             // Fire rules
+            kSession.insert(patient);
             kSession.fireAllRules();
-            // Handle results
-            System.out.println("Patient diagnosis: " + patient.getDisease());
-            Summary summary = new Summary();
-            summary.displaySummary(patient.getDisease());
-            // Dispose the session
-            kSession.dispose();
+
+            if (patient.getDisease()!=null) {
+                System.out.println("\n\nPatient diagnosis: " + patient.getDisease());
+                Summary summary = new Summary();
+                summary.displaySummary(patient.getDisease());
+                System.out.println("\n");
+            } else {
+                System.out.println("\n\nSorry but it seems like there's no matches for a cardiac disease in our system, so we can't 100% diagnose you with any disease.\nPlease consult with a different specialist for further testing.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void removeSymptoms(LinkedList<Symptom> list){
+    public static LinkedList<Symptom> removeSymptoms(Patient patient){
+        LinkedList<Symptom> old = patient.getSymptoms();
         int i = 0;
-        for (Symptom symp : list){
+        for (Symptom symp : old){
         System.out.println((i+1) + ". " + symp);
         i++;
         }
@@ -257,19 +263,21 @@ public class Main {
 
         for (String number : numbers) {
             int index = Integer.parseInt(number) - 1;
-            if (index >= 0 && index < list.size()) {
-                symptomsToRemove.add(list.get(index));
+            if (index >= 0 && index < old.size()) {
+                symptomsToRemove.add(old.get(index));
             } else {
                 System.out.println("Invalid index: " + (index + 1));
             }
         }
         for (Symptom symptom : symptomsToRemove) {
-            list.remove(symptom);
+            old.remove(symptom);
         }
-        System.out.println("Updated symptoms: " + list);
+        System.out.println("Updated symptoms: " + old);
+        return old;
     }
 
-    public static void addSymptoms(LinkedList<Symptom> list){
+    public static LinkedList<Symptom> addSymptoms(Patient patient){
+        LinkedList<Symptom> old = patient.getSymptoms();
         showAllSymptoms();
         System.out.print("Enter the numbers of selected symptoms (separated by spaces): ");
         String input = sc.nextLine();
@@ -278,15 +286,15 @@ public class Main {
         String[] numbers = input.split("\\s+");
         for (String number : numbers) {
             int index = Integer.parseInt(number) - 1;
-            if (index >= 0 && index <= symptoms.length && !list.contains(symptoms[index])) {
-                list.add(symptoms[index]);
+            if (index >= 0 && index <= symptoms.length && !old.contains(symptoms[index])) {
+                old.add(symptoms[index]);
             }
         }
-        System.out.println(list);
+        System.out.println(old);
+        return old;
     }
 
     public static Patient choosePatient() throws IOException{
-        //Scanner sc = new Scanner(System.in);
         LinkedList<Patient> list = hospital.getListOfPatients();
         System.out.println("List of patients in this hospital: ");
         for (int i = 0; i< list.size(); i++){
@@ -300,24 +308,28 @@ public class Main {
             choice = Integer.parseInt(sc.nextLine());
         }
         Patient patient = list.get(choice);
-        //sc.close();
         return patient;
     }
     public static void makeDiagnosis() throws IOException{
         Patient patient = choosePatient();
         System.out.println(patient);
+        patient.setDisease(null); //we do this so the previous disease doesn't appear in case the symptoms have changed
         try {
             Resource resource = ResourceFactory.newClassPathResource("cardiac_diseases/drools.drl.xlsx");
             // Create Drools session
             kSession = new DroolsBeanFactory().getKieSession(resource);
             // Fire rules
+            kSession.insert(patient);
             kSession.fireAllRules();
-            // Handle results
-            System.out.println("Patient diagnosis: " + patient.getDisease());
-            Summary summary = new Summary();
-            summary.displaySummary(patient.getDisease());
-            // Dispose the session
-            kSession.dispose();
+
+            if (patient.getDisease()!=null) {
+                System.out.println("\n\nPatient diagnosis: " + patient.getDisease());
+                Summary summary = new Summary();
+                summary.displaySummary(patient.getDisease());
+                System.out.println("\n");
+            } else {
+                System.out.println("\n\nSorry but it seems like there's no matches for a cardiac disease in our system, so we can't 100% diagnose you with any disease.\nPlease consult with a different specialist for further testing.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
