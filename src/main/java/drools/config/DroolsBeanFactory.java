@@ -26,10 +26,6 @@ public class DroolsBeanFactory {
         return ksession;
     }
 
-    /*
-     * Can be used for debugging
-     * Input excelFile example: com/baeldung/drools/rules/Discount.xls
-     */
     public String getDrlFromExcel(String excelFile) {
         DecisionTableConfiguration configuration = KnowledgeBuilderFactory.newDecisionTableConfiguration();
         configuration.setInputType(DecisionTableInputType.XLS);
