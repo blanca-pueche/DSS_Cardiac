@@ -56,14 +56,4 @@ public class Summary {
         String summary = getSummary(disease);
         System.out.println(summary);
     }
-
-    //TODO delete
-    public static void main(String[] args) {
-        Summary summaries = new Summary();
-
-        // Displaying summary for a specific disease
-        Disease disease = Disease.ENDOCARDITIS;
-        System.out.println("Summary for " + disease + ":");
-        summaries.displaySummary(disease);
-    }
 }

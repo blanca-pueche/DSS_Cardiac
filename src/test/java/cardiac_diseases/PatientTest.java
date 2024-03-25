@@ -17,8 +17,6 @@ public class PatientTest {
     @Before
     public void setup() {
         Resource resource = ResourceFactory.newClassPathResource("cardiac_diseases/drools.drl.xlsx", getClass());
-        String drl = new DroolsBeanFactory().getDrlFromExcel("cardiac_diseases/drools.drl.xlsx");
-        System.out.println(drl);
         kSession = new DroolsBeanFactory().getKieSession(resource);
         System.out.println(new DroolsBeanFactory().getDrlFromExcel("cardiac_diseases/drools.drl.xlsx"));
     }
@@ -28,17 +26,16 @@ public class PatientTest {
         Patient patient = new Patient("Blanca", "Pueche", 20);
         patient.getSymptoms().add(Symptom.CHEST_PAIN);
         patient.getSymptoms().add(Symptom.SCAPULA_PAIN);
+        patient.getSymptoms().add(Symptom.DRY_COUGH);
         patient.getSymptoms().add(Symptom.HOARSENES);
         patient.getSymptoms().add(Symptom.DYSPHAGIA);
         patient.getSymptoms().add(Symptom.DYSPNEA);
         patient.getSymptoms().add(Symptom.STRIDOR);
-        patient.getSymptoms().add(Symptom.DRY_COUGH);
         kSession.insert(patient);
 
         int rulesFired = kSession.fireAllRules();
         System.out.println(rulesFired);
         System.out.println(patient);
-        //assertEquals(25, patient.getAge());
         assertEquals(Disease.DESCENDING_AORTIC_ANEURYSM, patient.getDisease());
     }
 }

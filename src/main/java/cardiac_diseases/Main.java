@@ -1,13 +1,20 @@
 package cardiac_diseases;
 
+import drools.config.DroolsBeanFactory;
+import org.kie.api.io.Resource;
+import org.kie.api.runtime.KieSession;
+import org.kie.internal.io.ResourceFactory;
+
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Scanner;
+import drools.config.DroolsBeanFactory.*;
 
 public class Main {
     public static Hospital hospital;
     public static FileManager file;
     public static Scanner sc;
+    private static KieSession kSession;
     public static void main(String[] args) throws Exception {
             boolean program = true;
             sc = new Scanner(System.in);
@@ -35,7 +42,7 @@ public class Main {
                             makeDiagnosis();
                             break;
                         }
-                        case 4: {
+                        case 4: { // Show info
                             showPatientsInfo();
                             break;
                         }
@@ -114,7 +121,6 @@ public class Main {
         String surname = sc.nextLine();
         System.out.println("Introduce the age of the patient:");
         Integer age = Integer.parseInt(sc.nextLine());
-        showAllSymptoms();
         LinkedList<Symptom> symptoms = selectSymptoms();
         Patient patient = new Patient(name, surname, age, symptoms);
         hospital.getListOfPatients().add(patient);
@@ -124,26 +130,24 @@ public class Main {
         Symptom [] valores = Symptom.values();
         int n= 0;
         for (Symptom symptom : valores) {
-            System.out.println(n + "." +symptom);
+            System.out.println((n+1) + "." +symptom);
             n++;
         }
     }
     public static LinkedList<Symptom> selectSymptoms() throws IOException{
-        //Scanner sc = new Scanner(System.in);
+        showAllSymptoms();
         System.out.print("Enter the numbers of selected symptoms (separated by spaces): ");
         String input = sc.nextLine();
         Symptom [] symptoms = Symptom.values();
         // Split the input by spaces and convert them to integers
         String[] numbers = input.split("\\s+");
         LinkedList<Symptom> selectedSymptoms = new LinkedList<>();
-        int numberOfSymptoms = 156;
         for (String number : numbers) {
             int index = Integer.parseInt(number) - 1;
-            if (index >= 0 && index < symptoms.length && !selectedSymptoms.contains(symptoms[index]) && index <= numberOfSymptoms ) {
+            if (index >= 0 && index <= symptoms.length && !selectedSymptoms.contains(symptoms[index])) {
                 selectedSymptoms.add(symptoms[index]);
             }
         }
-        //sc.close();
         return selectedSymptoms;
     }
     public static void modifyPatient() throws IOException{
@@ -164,7 +168,6 @@ public class Main {
     }
 
     public static void modifyName(Patient patient) throws IOException{
-        //Scanner sc = new Scanner(System.in);
         System.out.println("Do you want to modify name?: [y/n]");
         String modify = sc.nextLine();
         modify = checkYorN(modify);
@@ -173,11 +176,8 @@ public class Main {
             String newName = sc.nextLine();
             patient.setName(newName);
         }
-
-        //sc.close();
     }
     public static void modifySurname(Patient patient) throws IOException{
-        //Scanner sc = new Scanner(System.in);
         System.out.println("Do you want to modify surname?: [y/n]");
         String modify = sc.nextLine();
         modify = checkYorN(modify);
@@ -186,10 +186,8 @@ public class Main {
             String newSurname = sc.nextLine();
             patient.setSurname(newSurname);
         }
-        //sc.close();
     }
     public static void modifyAge(Patient patient) throws IOException{
-        //Scanner sc = new Scanner(System.in);
         System.out.println("Do you want to modify age?: [y/n]");
         String modify = sc.nextLine();
         modify = checkYorN(modify);
@@ -198,7 +196,6 @@ public class Main {
             Integer newAge = Integer.parseInt(sc.nextLine());
             patient.setAge(newAge);
         }
-        //sc.close();
     }
     public static void modifySymptoms(Patient patient) throws IOException{
         //Scanner sc = new Scanner(System.in);
@@ -224,26 +221,50 @@ public class Main {
             modify = sc.nextLine();
             modify = checkYorN(modify);
             if (modify.equalsIgnoreCase("y")){
-                //TODO call the makeDiagnosis function
+                makeNewDiagnosis(patient);
             }
         }
-        //sc.close();
+    }
+
+    private static void makeNewDiagnosis(Patient patient) {
+        try {
+            Resource resource = ResourceFactory.newClassPathResource("cardiac_diseases/drools.drl.xlsx");
+            // Create Drools session
+            kSession = new DroolsBeanFactory().getKieSession(resource);
+            // Fire rules
+            kSession.fireAllRules();
+            // Handle results
+            System.out.println("Patient diagnosis: " + patient.getDisease());
+            Summary summary = new Summary();
+            summary.displaySummary(patient.getDisease());
+            // Dispose the session
+            kSession.dispose();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void removeSymptoms(LinkedList<Symptom> list){
         int i = 0;
         for (Symptom symp : list){
-        System.out.println(i + ". " + symp);
+        System.out.println((i+1) + ". " + symp);
         i++;
         }
         System.out.println("Enter the numbers of symptoms you want to remove (separated by spaces): ");
         String input = sc.nextLine();
         String[] numbers = input.split("\\s+");
-        for(String number:numbers){
-            int index = Integer.parseInt(number);
-            if(index>=0 && index<list.size()){
-                list.remove(index);
+        LinkedList<Symptom> symptomsToRemove = new LinkedList<>();
+
+        for (String number : numbers) {
+            int index = Integer.parseInt(number) - 1;
+            if (index >= 0 && index < list.size()) {
+                symptomsToRemove.add(list.get(index));
+            } else {
+                System.out.println("Invalid index: " + (index + 1));
             }
+        }
+        for (Symptom symptom : symptomsToRemove) {
+            list.remove(symptom);
         }
         System.out.println("Updated symptoms: " + list);
     }
@@ -255,15 +276,13 @@ public class Main {
         Symptom [] symptoms = Symptom.values();
         // Split the input by spaces and convert them to integers
         String[] numbers = input.split("\\s+");
-        int numberOfSymptoms = 156;
         for (String number : numbers) {
             int index = Integer.parseInt(number) - 1;
-            if (index >= 0 && index < symptoms.length && !list.contains(symptoms[index]) && index <= numberOfSymptoms ) {
+            if (index >= 0 && index <= symptoms.length && !list.contains(symptoms[index])) {
                 list.add(symptoms[index]);
             }
         }
         System.out.println(list);
-
     }
 
     public static Patient choosePatient() throws IOException{
@@ -287,7 +306,21 @@ public class Main {
     public static void makeDiagnosis() throws IOException{
         Patient patient = choosePatient();
         System.out.println(patient);
-        //TODO finish function
+        try {
+            Resource resource = ResourceFactory.newClassPathResource("cardiac_diseases/drools.drl.xlsx");
+            // Create Drools session
+            kSession = new DroolsBeanFactory().getKieSession(resource);
+            // Fire rules
+            kSession.fireAllRules();
+            // Handle results
+            System.out.println("Patient diagnosis: " + patient.getDisease());
+            Summary summary = new Summary();
+            summary.displaySummary(patient.getDisease());
+            // Dispose the session
+            kSession.dispose();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     public static void showPatientsInfo(){
         LinkedList<Patient> list = hospital.getListOfPatients();
@@ -295,6 +328,5 @@ public class Main {
             System.out.println(pat);
         }
     }
-
 
 }
