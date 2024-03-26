@@ -11,13 +11,13 @@ public class Patient {
     private Disease disease;
     private LinkedList<Symptom> symptoms = new LinkedList<>();
 
-    public Patient(String name, String surname, int age, Disease disease){
-        this.name = name;
-        this.surname = surname;
-        this.age = age;
-        this.disease = disease;
+    public Patient(){
+        this.name = null;
+        this.surname = null;
+        this.age = 0;
+        this.symptoms = new LinkedList<>();
+        this.disease = null;
     }
-
     public Patient(String name, String surname, int age, LinkedList<Symptom> listOfSymptoms){
         this.name = name;
         this.surname = surname;
@@ -36,6 +36,7 @@ public class Patient {
         this.name = name;
         this.surname = surname;
         this.age = age;
+        this.symptoms = new LinkedList<>();
     }
 
     public String getName() {
@@ -103,18 +104,5 @@ public class Patient {
     }
     public String toCSV(){
         return this.name +","+ this.surname+","+this.age+","+this.symptoms+","+this.disease;
-    }
-
-    public static void main(String[] args){
-        try{
-            Patient patient1 = new Patient("Pepe", "Aparicio", 57, Disease.INTERAURICULAR_COMMUNICATION );
-            System.out.println(patient1);
-
-            patient1.symptoms.add(Symptom.BRADYCHARDIA);
-            patient1.symptoms.add(Symptom.STRIDOR);
-            System.out.println(patient1);
-
-        }catch(Exception ex){
-            System.out.printf("Error: " + ex);}
     }
 }

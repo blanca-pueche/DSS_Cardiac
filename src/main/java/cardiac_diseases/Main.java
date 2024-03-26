@@ -43,7 +43,7 @@ public class Main {
                             break;
                         }
                         case 4: { // Show info
-                            showPatientsInfo();
+                            showPatientsInfo(hospital);
                             break;
                         }
                         case 7: { //TODO ir actualizando la lista de pacientes del hospital
@@ -334,10 +334,14 @@ public class Main {
             e.printStackTrace();
         }
     }
-    public static void showPatientsInfo(){
-        LinkedList<Patient> list = hospital.getListOfPatients();
-        for (Patient pat: list){
-            System.out.println(pat);
+    public static void showPatientsInfo(Hospital hosp){
+        LinkedList<Patient> list = hosp.getListOfPatients();
+        if (list.isEmpty()){
+            System.out.println("No patients");
+        }else {
+            for (Patient pat : list) {
+                System.out.println(pat);
+            }
         }
     }
 

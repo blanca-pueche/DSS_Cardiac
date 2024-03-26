@@ -22,7 +22,7 @@ public class PatientTest {
     }
 
     @Test
-    public void patientTest() throws Exception {
+    public void patientTest1() throws Exception {
         //CASE 1: All the symptoms match with a disease, we have descending aortic aneurysm
         Patient p1 = new Patient("A", "A", 20);
         p1.getSymptoms().add(Symptom.CHEST_PAIN);
@@ -33,19 +33,37 @@ public class PatientTest {
         p1.getSymptoms().add(Symptom.DYSPNEA);
         p1.getSymptoms().add(Symptom.STRIDOR);
         kSession.insert(p1);
-
-        //CASE 2: None of the symptoms match a disease
-        Patient p2 = new Patient("B", "B" , 39 );
-        p2.getSymptoms().add(Symptom.PARADOXIC_PULSE);
-        p2.getSymptoms().add(Symptom.DECREASED_FEMORAL_PULSE);
-        p2.getSymptoms().add(Symptom.HYPOXEMIA);
-        p2.getSymptoms().add(Symptom.RALES);
-        kSession.insert(p2);
-
+        int rulesFired = kSession.fireAllRules();
+        System.out.println(rulesFired);
+        System.out.println(p1);
+        assertEquals(Disease.DESCENDING_AORTIC_ANEURYSM, p1.getDisease());
+    }
+    @Test
+    public void patientTest2() throws Exception {
+            //CASE 2: None of the symptoms match a disease
+            Patient p2 = new Patient("B", "B", 39);
+            p2.getSymptoms().add(Symptom.PARADOXIC_PULSE);
+            p2.getSymptoms().add(Symptom.DECREASED_FEMORAL_PULSE);
+            p2.getSymptoms().add(Symptom.HYPOXEMIA);
+            p2.getSymptoms().add(Symptom.RALES);
+            kSession.insert(p2);
+            int rulesFired = kSession.fireAllRules();
+            System.out.println(rulesFired);
+            System.out.println(p2);
+            assertEquals(null, p2.getDisease());
+    }
+    @Test
+    public void patientTest3() throws Exception {
         //CASE 3: The patient doesn't have symptoms
-        Patient p3 = new Patient("C", "C" , 87 );
+        Patient p3 = new Patient("C", "C", 87);
         kSession.insert(p3);
-
+        int rulesFired = kSession.fireAllRules();
+        System.out.println(rulesFired);
+        System.out.println(p3);
+        assertEquals(null, p3.getDisease());
+    }
+    @Test
+    public void patientTest4() throws Exception {
         //CASE 4: All symptoms except one of them match
         //if instead HOARSENES we had SWEAT  we would be diagnosed with myocardial infarction)
         Patient p4 = new Patient("D", "D", 54);
@@ -65,7 +83,13 @@ public class PatientTest {
         p4.getSymptoms().add(Symptom.JAW_PAIN);
         p4.getSymptoms().add(Symptom.HOARSENES);
         kSession.insert(p4);
-
+        int rulesFired = kSession.fireAllRules();
+        System.out.println(rulesFired);
+        System.out.println(p4);
+        assertEquals(null, p4.getDisease());
+    }
+    @Test
+    public void patientTest5() throws Exception {
         //CASE 5: It has more symptoms than expected for a specific disease
         //if we didn't have COREA and NAUSEA, we would be 100% diagnosed with compensatory crash
         //but as it has two additional symptoms, our expert system can't 100ç5 determine the patient has the disease
@@ -79,17 +103,8 @@ public class PatientTest {
         p5.getSymptoms().add(Symptom.COREA);
         p5.getSymptoms().add(Symptom.NAUSEA);
         kSession.insert(p5);
-
         int rulesFired = kSession.fireAllRules();
         System.out.println(rulesFired);
-        System.out.println(p1);
-        assertEquals(Disease.DESCENDING_AORTIC_ANEURYSM, p1.getDisease());
-        System.out.println(p2);
-        assertEquals(null, p2.getDisease());
-        System.out.println(p3);
-        assertEquals(null, p3.getDisease());
-        System.out.println(p4);
-        assertEquals(null, p4.getDisease());
         System.out.println(p5);
         assertEquals(null, p5.getDisease());
     }
