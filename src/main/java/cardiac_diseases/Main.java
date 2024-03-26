@@ -35,11 +35,11 @@ public class Main {
                             break;
                         }
                         case 2: { // Modify patient
-                            modifyPatient();
+                            modifyPatient(hospital);
                             break;
                         }
                         case 3: { // Make diagnosis
-                            makeDiagnosis();
+                            makeDiagnosis(hospital);
                             break;
                         }
                         case 4: { // Show info
@@ -148,7 +148,11 @@ public class Main {
         }
         return selectedSymptoms;
     }
-    public static void modifyPatient() throws IOException{
+    public static void modifyPatient(Hospital hosp) throws IOException{
+        LinkedList<Patient> list = hosp.getListOfPatients();
+        if (list.isEmpty()){
+            System.out.println("No patients");
+        }
         Patient patient = choosePatient();
         System.out.println(patient);
         modifyName(patient);
@@ -310,7 +314,11 @@ public class Main {
         Patient patient = list.get(choice);
         return patient;
     }
-    public static void makeDiagnosis() throws IOException{
+    public static void makeDiagnosis(Hospital hosp) throws IOException{
+        LinkedList<Patient> list = hosp.getListOfPatients();
+        if (list.isEmpty()){
+            System.out.println("No patients");
+        }
         Patient patient = choosePatient();
         System.out.println(patient);
         patient.setDisease(null); //we do this so the previous disease doesn't appear in case the symptoms have changed
