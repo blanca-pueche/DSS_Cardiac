@@ -1,7 +1,11 @@
 package cardiac_diseases;
 
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.LinkedList;
 
 import static org.junit.Assert.assertEquals;
@@ -52,12 +56,27 @@ public class modifyPatient {
         p4.setDisease(newDisease);
         assertEquals(p4.getDisease(), newDisease);
     }
+
+    private String captureOutput(Runnable action) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+        action.run();
+        System.setOut(System.out);
+        return outputStream.toString().trim();
+    }
     @Test
     public void modifyPatient5() throws Exception {
-        //CASE 5: name doesn't modify because we called the wrong setter
-        Patient p5 = new Patient("D", "D", 44);
-        String newName2 = "Juana";
-        p5.setSurname(newName2);
-        assertEquals(p5.getName(), "D");
+        //CASE 5: the hospitals' patient list is empty. This one we can use the function that's in the Main
+        Hospital hospital = new Hospital("h");
+        LinkedList<Patient> list = new LinkedList<>();
+        hospital.setListOfPatients(list);
+        Assertions.assertEquals("No patients", captureOutput(() -> {
+            try {
+                Main.modifyPatient(hospital);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }));
+
     }
 }

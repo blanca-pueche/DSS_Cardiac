@@ -152,6 +152,7 @@ public class Main {
         LinkedList<Patient> list = hosp.getListOfPatients();
         if (list.isEmpty()){
             System.out.println("No patients");
+            return;
         }
         Patient patient = choosePatient();
         System.out.println(patient);
@@ -200,7 +201,6 @@ public class Main {
         }
     }
     public static void modifySymptoms(Patient patient) throws IOException{
-        //Scanner sc = new Scanner(System.in);
         System.out.println("Current symptoms");
         System.out.println(patient.getSymptoms());
         System.out.println("Do you want to modify symptoms?: [y/n]");
