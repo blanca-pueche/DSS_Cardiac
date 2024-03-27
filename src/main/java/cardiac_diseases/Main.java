@@ -97,9 +97,9 @@ public class Main {
                 switch (num) {
                     case 1: {
                         System.out.println("Enter the name of the file you want to open: ");
-                        String fileName = sc.nextLine(); // Store the name of the file
-                        file = new FileManager(fileName); // Use the provided file name to initialize FileManager
-                        hospital = file.uploadCSV(); // Creates a hospital based on the file
+                        String fileName = sc.nextLine();
+                        file = new FileManager(fileName);
+                        hospital = file.uploadCSV();
                         break;
                     }
                     case 2: {
@@ -119,10 +119,6 @@ public class Main {
             }
         }
     }
-
-
-
-
 
     private static void createPatient() throws IOException {
         System.out.println("Introduce the name of the patient:");
