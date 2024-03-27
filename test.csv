@@ -1,0 +1,3 @@
+"Hospital","Patient name","Patient Lastname","Patient Age","Symptoms","Disease"
+"test","example","example","50","CHEST_PAIN,SCAPULA_PAIN,HOARSENES,DYSPNEA,DYSPHAGIA,DRY_COUGH,STRIDOR","DESCENDING_AORTIC_ANEURYSM"
+"test","example","example","40","SCAPULA_PAIN,LOWER_BACK_PAIN,ABDOMINAL_PAIN","null"
