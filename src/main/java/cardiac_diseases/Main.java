@@ -5,6 +5,8 @@ import org.kie.api.io.Resource;
 import org.kie.api.runtime.KieSession;
 import org.kie.internal.io.ResourceFactory;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -18,7 +20,6 @@ public class Main {
     public static void main(String[] args) throws Exception {
             boolean program = true;
             sc = new Scanner(System.in);
-            //Scanner sc = new Scanner(System.in);
             try {
                 hospitalMenu();
                 while (program) {
@@ -76,7 +77,7 @@ public class Main {
 
         System.out.println("   7: Exit");
     }
-    private static void hospitalMenu(){
+    private static void hospitalMenu() {
         while(true) {
             try {
                 System.out.println("-----------------WELCOME-----------------");
@@ -96,7 +97,7 @@ public class Main {
                         String name = sc.nextLine();
                         file = new FileManager(name);
                         hospital = file.uploadCSV(); //creates a hospital based on the file
-                        break; //TODO what if the file there is not a file with that name
+                        break;
                     }
                     case 2: {
                         System.out.println("Enter the name of the new file: ");
@@ -110,6 +111,8 @@ public class Main {
                 break;
             } catch (NumberFormatException ex) {
                 System.out.println("Please select a number");
+            } catch (FileNotFoundException ex){
+                System.out.println("The file doesn't exist");
             }
         }
     }

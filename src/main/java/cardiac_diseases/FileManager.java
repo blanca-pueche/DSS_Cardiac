@@ -48,7 +48,7 @@ public class FileManager {
         return builder.toString();
     }
 
-    public static Hospital uploadCSV() {
+    public static Hospital uploadCSV() throws FileNotFoundException{
         Hospital hospital = null;
 
         LinkedList<Patient> listPatients = new LinkedList<>();
@@ -98,7 +98,8 @@ public class FileManager {
             reader.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error: " + e);
+            throw new FileNotFoundException("File not found: " + name + ".csv");
         } catch (Exception ex) {
             System.out.println("Error: " + ex);
             ex.printStackTrace();
