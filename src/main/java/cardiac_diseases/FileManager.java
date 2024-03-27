@@ -4,18 +4,17 @@ import java.io.*;
 import java.util.LinkedList;
 
 public class FileManager {
+    private String name;
 
-       private static String name ;
     public FileManager(String name) {
         this.name = name;
     }
 
-    public static boolean downloadCSV(Hospital hospital) {
+    public boolean downloadCSV(Hospital hospital) {
         boolean check = true;
-
         try {
-            File file = new File(hospital.getName() + ".csv");
-            FileWriter fileWriter = new FileWriter(file);
+            File file = new File(name + ".csv");
+            FileWriter fileWriter = new FileWriter(file); // Open file in write mode
 
             // Write the header
             fileWriter.write("\"Hospital\",\"Patient name\",\"Patient Lastname\",\"Patient Age\",\"Symptoms\",\"Disease\"\n");
@@ -36,7 +35,8 @@ public class FileManager {
         return check;
     }
 
-    private static String symptomsToString(LinkedList<Symptom> symptoms) {
+
+    private String symptomsToString(LinkedList<Symptom> symptoms) {
         StringBuilder builder = new StringBuilder();
         for (Symptom symptom : symptoms) {
             builder.append(symptom).append(",");
@@ -48,11 +48,9 @@ public class FileManager {
         return builder.toString();
     }
 
-    public static Hospital uploadCSV() throws FileNotFoundException{
+    public Hospital uploadCSV() throws FileNotFoundException {
         Hospital hospital = null;
-
         LinkedList<Patient> listPatients = new LinkedList<>();
-
         try {
             FileReader fileCSV = new FileReader(name + ".csv");
             BufferedReader reader = new BufferedReader(fileCSV);
@@ -93,7 +91,9 @@ public class FileManager {
                 listPatients.add(patient);
                 System.out.println(patient);
             }
-            hospital = new Hospital(listPatients.getFirst().getName());
+            // Set hospital name based on file name
+            String hospitalName = name; // You might need to adjust this based on your file naming convention
+            hospital = new Hospital(hospitalName);
             hospital.setListOfPatients(listPatients);
             reader.close();
 
@@ -107,11 +107,12 @@ public class FileManager {
         return hospital;
     }
 
-    public static String getName() {
+
+    public String getName() {
         return name;
     }
 
-    public static void setName(String name) {
-        FileManager.name = name;
+    public void setName(String name) {
+        this.name = name;
     }
 }

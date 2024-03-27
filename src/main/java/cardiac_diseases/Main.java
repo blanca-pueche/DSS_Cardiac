@@ -47,16 +47,18 @@ public class Main {
                             showPatientsInfo(hospital);
                             break;
                         }
-                        case 7: { //TODO ir actualizando la lista de pacientes del hospital
-                            boolean fileCreation = file.downloadCSV(hospital);
-                            if (fileCreation) {
-                                System.out.print("Saved file correctly\n");
+                        case 7: {
+                            boolean fileUpdated = file.downloadCSV(hospital);
+                            if (fileUpdated) {
+                                System.out.println("File updated successfully");
                             } else {
-                                System.out.print("Couldn't save file correctly\n");
+                                System.out.println("Failed to update the file");
                             }
                             System.out.println("Closing app...");
                             program = false;
+                            break;
                         }
+
                     }
                 }
                 sc.close();
@@ -77,6 +79,7 @@ public class Main {
 
         System.out.println("   7: Exit");
     }
+
     private static void hospitalMenu() {
         while(true) {
             try {
@@ -94,9 +97,9 @@ public class Main {
                 switch (num) {
                     case 1: {
                         System.out.println("Enter the name of the file you want to open: ");
-                        String name = sc.nextLine();
-                        file = new FileManager(name);
-                        hospital = file.uploadCSV(); //creates a hospital based on the file
+                        String fileName = sc.nextLine(); // Store the name of the file
+                        file = new FileManager(fileName); // Use the provided file name to initialize FileManager
+                        hospital = file.uploadCSV(); // Creates a hospital based on the file
                         break;
                     }
                     case 2: {
@@ -116,6 +119,11 @@ public class Main {
             }
         }
     }
+
+
+
+
+
     private static void createPatient() throws IOException {
         System.out.println("Introduce the name of the patient:");
         String name = sc.nextLine();
