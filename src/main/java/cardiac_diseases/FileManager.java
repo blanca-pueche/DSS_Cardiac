@@ -2,6 +2,7 @@ package cardiac_diseases;
 
 import java.io.*;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 public class FileManager {
     private String name;
