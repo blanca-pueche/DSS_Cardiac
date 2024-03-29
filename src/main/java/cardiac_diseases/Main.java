@@ -81,19 +81,20 @@ public class Main {
     }
 
     private static void hospitalMenu() {
-        while(true) {
+        while (true) {
             try {
                 System.out.println("-----------------WELCOME-----------------");
                 System.out.println("Would you like to open a CSV with the patients or create a new one?:");
                 System.out.println("   1: Open CSV ");
                 System.out.println("   2: Create a new one");
 
-                Integer num = Integer.parseInt(sc.nextLine());
-                while (num != 1 && num != 2) {
+                int num = Integer.parseInt(sc.nextLine());
+
+                if (num != 1 && num != 2) {
                     System.out.println("Not a valid number... try again");
-                    hospitalMenu();
-                    num = Integer.parseInt(sc.nextLine());
+                    continue; // Ask for input again
                 }
+
                 switch (num) {
                     case 1: {
                         System.out.println("Enter the name of the file you want to open: ");
@@ -111,14 +112,15 @@ public class Main {
                         break;
                     }
                 }
-                break;
+                break; // Exit the loop if input is valid
             } catch (NumberFormatException ex) {
                 System.out.println("Please select a number");
-            } catch (FileNotFoundException ex){
+            } catch (FileNotFoundException ex) {
                 System.out.println("The file doesn't exist");
             }
         }
     }
+
 
     private static void createPatient() throws IOException {
         System.out.println("Introduce the name of the patient:");
