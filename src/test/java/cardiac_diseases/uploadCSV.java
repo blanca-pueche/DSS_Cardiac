@@ -53,7 +53,7 @@ public class uploadCSV {
     }
 
     @Test(expected = FileNotFoundException.class)
-    public void testUploadCSV_FileNotFound() throws FileNotFoundException {
+    public void uploadCSV5() throws FileNotFoundException {
         //CASE 5: CSV File Not Found Test
         FileManager fileManager = new FileManager("testCase5");
         fileManager.uploadCSV();

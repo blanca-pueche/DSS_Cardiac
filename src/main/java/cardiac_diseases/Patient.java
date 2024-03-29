@@ -102,7 +102,4 @@ public class Patient {
                 ", symptoms=" + symptoms +
                 '}';
     }
-    public String toCSV(){
-        return this.name +","+ this.surname+","+this.age+","+this.symptoms+","+this.disease;
-    }
 }

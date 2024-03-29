@@ -36,15 +36,15 @@ public class Main {
                             break;
                         }
                         case 2: { // Modify patient
-                            modifyPatient(hospital);
+                            modifyPatient();
                             break;
                         }
                         case 3: { // Make diagnosis
-                            makeDiagnosis(hospital);
+                            makeDiagnosis();
                             break;
                         }
                         case 4: { // Show info
-                            showPatientsInfo(hospital);
+                            showPatientsInfo();
                             break;
                         }
                         case 7: {
@@ -155,8 +155,8 @@ public class Main {
         }
         return selectedSymptoms;
     }
-    public static void modifyPatient(Hospital hosp) throws IOException{
-        LinkedList<Patient> list = hosp.getListOfPatients();
+    public static void modifyPatient() throws IOException{
+        LinkedList<Patient> list = hospital.getListOfPatients();
         if (list.isEmpty()){
             System.out.println("No patients");
             return;
@@ -321,8 +321,8 @@ public class Main {
         Patient patient = list.get(choice);
         return patient;
     }
-    public static void makeDiagnosis(Hospital hosp) throws IOException{
-        LinkedList<Patient> list = hosp.getListOfPatients();
+    public static void makeDiagnosis() throws IOException{
+        LinkedList<Patient> list = hospital.getListOfPatients();
         if (list.isEmpty()){
             System.out.println("No patients");
         }
@@ -349,8 +349,8 @@ public class Main {
             e.printStackTrace();
         }
     }
-    public static void showPatientsInfo(Hospital hosp){
-        LinkedList<Patient> list = hosp.getListOfPatients();
+    public static void showPatientsInfo() throws NullPointerException{
+        LinkedList<Patient> list = hospital.getListOfPatients();
         if (list.isEmpty()){
             System.out.println("No patients");
         }else {
@@ -358,6 +358,10 @@ public class Main {
                 System.out.println(pat);
             }
         }
+    }
+
+    public static void setHospital(Hospital h){
+        hospital = h;
     }
 
 }

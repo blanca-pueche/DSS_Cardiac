@@ -66,17 +66,21 @@ public class modifyPatient {
     }
     @Test
     public void modifyPatient5() throws Exception {
-        //CASE 5: the hospitals' patient list is empty. This one we can use the function that's in the Main
+        // CASE 5: the hospitals' patient list is empty. This one we can use the function that's in the Main
         Hospital hospital = new Hospital("h");
         LinkedList<Patient> list = new LinkedList<>();
         hospital.setListOfPatients(list);
-        Assertions.assertEquals("No patients", captureOutput(() -> {
+
+        // Redirect output stream to capture console output
+        String output = captureOutput(() -> {
             try {
-                Main.modifyPatient(hospital);
+                Main.setHospital(hospital); // Set the hospital for the Main class
+                Main.modifyPatient();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        }));
+        });
 
+        assertEquals("No patients", output);
     }
 }
